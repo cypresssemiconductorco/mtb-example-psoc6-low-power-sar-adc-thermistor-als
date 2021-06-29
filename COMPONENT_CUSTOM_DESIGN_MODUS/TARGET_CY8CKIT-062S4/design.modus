@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Design version="12" xmlns="http://cypress.com/xsd/cydesignfile_v3">
-    <ToolInfo version="2.2.0.2703"/>
+<Design version="12" device_library_hint_path="../../../mtb_shared/mtb-pdl-cat1/latest-v2.X/devicesupport.xml" xmlns="http://cypress.com/xsd/cydesignfile_v3">
+    <ToolInfo version="2.3.0.4276"/>
     <Devices>
         <Device mpn="CY8C6244LQI-S4D92">
             <BlockConfig>
@@ -325,7 +325,7 @@
                 </Block>
                 <Block location="pass[0].saradc[0]">
                     <Personality template="mxs40saradc" version="1.0">
-                        <Param id="powerUpDelay" value="20"/>
+                        <Param id="powerUpDelay" value="40"/>
                         <Param id="SarScanCount" value="1"/>
                         <Param id="SimultSar0" value="false"/>
                         <Param id="SimultSar1" value="false"/>
@@ -340,9 +340,9 @@
                     </Personality>
                 </Block>
                 <Block location="pass[0].saradc[0].sar[0]">
-                    <Personality template="mxs40sar" version="3.0">
+                    <Personality template="mxs40sar" version="4.0">
                         <Param id="vref_select" value="CY_SAR_VREF_SEL_VDDA"/>
-                        <Param id="vref_voltage" value="1.2"/>
+                        <Param id="vref_voltage" value="1.200"/>
                         <Param id="num_channels" value="3"/>
                         <Param id="inj_en" value="false"/>
                         <Param id="vref_byp_cap" value="false"/>
@@ -350,7 +350,6 @@
                         <Param id="is_variable_clock" value="false"/>
                         <Param id="soc_en" value="true"/>
                         <Param id="trTimer" value="true"/>
-                        <Param id="vneg_select" value="CY_SAR_NEG_SEL_VSSA_KELVIN"/>
                         <Param id="sample_rate" value="10000"/>
                         <Param id="diff_format" value="CY_SAR_DIFFERENTIAL_SIGNED"/>
                         <Param id="se_format" value="CY_SAR_SINGLE_ENDED_SIGNED"/>
@@ -447,6 +446,7 @@
                         <Param id="inj_range_intr" value="false"/>
                         <Param id="inj_sat_intr" value="false"/>
                         <Param id="inj_min_acq_time" value="84"/>
+                        <Param id="vneg_select" value="CY_SAR_NEG_SEL_VSSA_KELVIN"/>
                         <Param id="fifo" value="true"/>
                         <Param id="chain" value="true"/>
                         <Param id="chanIdEn" value="true"/>
@@ -585,7 +585,7 @@
                 </Net>
                 <Mux name="Vminus" location="pass[0].saradc[0].sar[0]">
                     <Arm>
-                        <Port name="ioss[0].port[10].pin[4].analog[0]"/>
+                        <Port name="ioss[0].port[10].pin[5].analog[0]"/>
                     </Arm>
                     <Arm>
                         <Port name="ioss[0].port[10].pin[6].analog[0]"/>
@@ -593,7 +593,7 @@
                 </Mux>
                 <Mux name="Vplus" location="pass[0].saradc[0].sar[0]">
                     <Arm>
-                        <Port name="ioss[0].port[10].pin[3].analog[0]"/>
+                        <Port name="ioss[0].port[10].pin[4].analog[0]"/>
                     </Arm>
                     <Arm>
                         <Port name="ioss[0].port[10].pin[5].analog[0]"/>
