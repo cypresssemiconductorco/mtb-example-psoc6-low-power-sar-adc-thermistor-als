@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -90,7 +90,7 @@ percent value. Configure the ALS_OFFSET with the lowest observed ALS percent. */
 ********************************************************************************/
 /* Function to convert the measured voltage in the thermistor circuit into
  * temperature */
-float get_temperature(int32 therm_count, int32 ref_count);
+double get_temperature(int32 therm_count, int32 ref_count);
 
 /* Function to convert the measured voltage in the ALS circuit into percentage */
 uint8 get_light_intensity(int32 adc_count);
@@ -154,7 +154,7 @@ int main(void)
     int32 filtered_data[CHANNEL_COUNT];
 
     /* Temperature value in deg C */
-    float temperature;
+    double temperature;
 
     /* Light intensity in percentage */
     uint8 light_intensity;
@@ -273,7 +273,7 @@ int main(void)
             if(display_delay == 4)
             {
                 /* Print the temperature and the ambient light value*/
-                printf("Temperature: %2.1fC    Ambient Light: %d%%\r\n", temperature, light_intensity);
+                printf("Temperature: %2.1lfC    Ambient Light: %d%%\r\n", temperature, light_intensity);
 
                 /* Clear the counter */
                 display_delay = false;
@@ -370,16 +370,16 @@ void init_analog_resources()
 *  temperature in degree celsius (float)
 *
 *******************************************************************************/
-float get_temperature(int32 therm_count, int32 ref_count)
+double get_temperature(int32 therm_count, int32 ref_count)
 {
-    float temperature;
-    float rThermistor;
+    double temperature;
+    double rThermistor;
 
     /* Calculate the thermistor resistance */
-    rThermistor = therm_count * R_REFERENCE / ref_count;
+    rThermistor = (double)therm_count * R_REFERENCE / ref_count;
 
     /* Calculate the temperature in deg C */
-    temperature = (B_CONSTANT/(logf(rThermistor/R_INFINITY))) + ABSOLUTE_ZERO;
+    temperature = (double)(B_CONSTANT/(logf(rThermistor/R_INFINITY))) + ABSOLUTE_ZERO;
 
     return(temperature);
 }
