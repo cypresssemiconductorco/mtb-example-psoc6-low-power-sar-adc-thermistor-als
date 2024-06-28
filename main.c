@@ -8,7 +8,7 @@
 *
 *
 *******************************************************************************
-* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2024, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -84,6 +84,12 @@ percent value. Configure the ALS_OFFSET with the lowest observed ALS percent. */
 /* ALS high threshold value - if ALS percentage is higher than this value, user
  * LED is turned OFF */
 #define ALS_HIGH_THRESHOLD                  (55)
+
+/* Raw data value from the ALS for the fully dark ambient */
+#define ALS_DARK_AMBIENT_RAW_DATA           (0xFFF0)
+
+/* The value that is passed to the IIR filter for the fully dark ambient */
+#define ALS_DARK_AMBIENT_DATA              (0)
 
 /*******************************************************************************
 * Function Prototypes
@@ -246,8 +252,19 @@ int main(void)
                  * variable and result variable */
                 if(first_run[fifo_data.channel] == true)
                 {
-                    filtered_data[fifo_data.channel] = fifo_data.value;
-                    filt_var[fifo_data.channel] = fifo_data.value << 8;
+                    /* If the raw data value from the ALS is greater than or equal to ALS_DARK_AMBIENT_RAW_DATA value,
+                     * then will skip the value and pass the ALS_DARK_AMBIENT_DATA value to the IIR filter. */
+                    if ((fifo_data.channel == ALS_SENSOR_CHANNEL) && (fifo_data.value >= ALS_DARK_AMBIENT_RAW_DATA))
+                    {
+                        filtered_data[fifo_data.channel] = ALS_DARK_AMBIENT_DATA;
+                        filt_var[fifo_data.channel] = ALS_DARK_AMBIENT_DATA;
+
+                    }
+                    else
+                    {
+                        filtered_data[fifo_data.channel] = fifo_data.value;
+                        filt_var[fifo_data.channel] = fifo_data.value << 8;
+                    }
 
                     /* Clear the flag */
                     first_run[fifo_data.channel] = false;
